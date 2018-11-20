@@ -14,36 +14,36 @@ The object can be given a complete SQL statement as a single string or it can be
 
 ### Querying using a complete SQL string
 ```vba
-dim oSQL as new clsSQLobj
-    osql.strSql = "SELECT Field1, Field2, Field3 " & _
+Dim oSQL As New clsSQLobj
+    oSQL.strSQL = "SELECT Field1, Field2, Field3 " & _
          "FROM TableA " & _
          "WHERE Field1='X';"
     'resulting recordset can be used immediately via .rs
-    debug.print oSQL.rs.RecordCount
+    Debug.Print oSQL.rs.RecordCount
 ```
 
 ### Querying using seperate SQL parts
 ```vba
-dim oSQL as new clsSQLobj
+Dim oSQL As New clsSQLobj
     oSQL.Sel = "Field1, Field2, Field3"
     oSQL.From = "TableA"
     oSQL.Where = "Field1='X'"
-    debug.print oSQL.makeStr()
+    Debug.Print oSQL.makeStr()
 ```
 SELECT Field1, Field2, Field3 FROM TableA WHERE (Field1='X');
 ```vba
-    debug.print oSQL.rs!Field1
+    Debug.Print oSQL.rs!Field1
 ```
 
 ### Multiple recordsets
 ```vba
-dim oSQL as new clsSQLobj
+Dim oSQL As New clsSQLobj
     oSQL.strSQL = "my sql string here"
     oSQL.addRecordset "rs1"
     'Alternative One-line Usage: oSQL.addRecordset "rs1", "my sql string here"
     oSQL.strSQL = "my 2nd sql string here"
     oSQL.addRecordset "rs2"
-    debug.print oSQL!rs1.recordcount & " " & oSQL("rs2").recordcount
+    Debug.Print oSQL!rs1.RecordCount & " " & oSQL("rs2").RecordCount
     oSQL.rsClose "rs1"
     oSQL.rsClose "rs2"
 ```
