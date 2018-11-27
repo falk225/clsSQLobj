@@ -13,7 +13,7 @@ Public Insert As String
 Public GroupBy As String
 Public Having As String
 Public Limit As Integer
-Public str_SQL As String
+Private str_SQL As String
 Public dict_rs As New Dictionary 'collection of recordsets created using addRecordset
 Private db As DAO.Database
 Private rs_object As DAO.Recordset
@@ -208,6 +208,13 @@ Public Function rs() As DAO.Recordset
     End If
     Set rs = rs_object
 End Function
+
+Public Sub clear_rs()
+    If Not rs_object Is Nothing Then
+        rs_object.Close
+        Set rs_object = Nothing
+    End If
+End Sub
 
 Public Sub refresh()
     If rs_object Is Nothing Then
