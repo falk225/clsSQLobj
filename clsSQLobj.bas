@@ -10,6 +10,9 @@ Public From As String
 Public Where As String
 Public OrderBy As String
 Public Insert As String
+Public GroupBy As String
+Public Having As String
+Public Limit As Integer
 Public str_SQL As String
 Public dict_rs As New Dictionary 'collection of recordsets created using addRecordset
 Private db As DAO.Database
@@ -46,29 +49,50 @@ Public Function makeStr() As String
 Dim strOrder As String
     strOrder = ""
     
-    If str_SQL = "" Then
-        If Sel = "" Then
+Dim sb As New StringBuilder
+    
+    If hasValue(str_SQL) Then
+        makeStr = str_SQL
+    Else
+        If hasValue(Sel) Then
+            If hasValue(Limit) Then
+                sb.Append "SELECT TOP " & Limit & " " & Sel
+            Else
+                sb.Append "SELECT " & Sel
+            End If
+        Else
             MsgBox "Select property not set."
             Exit Function
         End If
         
-        If From = "" Then
+        If hasValue(From) Then
+            sb.Append " FROM " & From
+        Else
             MsgBox "From property not set."
             Exit Function
         End If
         
-        If Where = "" Then
+        If hasValue(Where) Then
+            sb.Append " WHERE (" & Where & ")"
+        Else
             MsgBox "Where property not set."
             Exit Function
         End If
         
-        If OrderBy <> "" Then 'order by is not required, but if provided will sort results
-            strOrder = " ORDER BY " & OrderBy
+        If hasValue(GroupBy) Then
+            sb.Append " GROUP BY " & GroupBy
         End If
         
-        makeStr = "SELECT " & Sel & " FROM " & From & " WHERE (" & Where & ")" & strOrder & ";"
-    Else
-        makeStr = str_SQL
+        If hasValue(Having) Then
+            sb.Append " HAVING (" & Having & ")"
+        End If
+        
+        If hasValue(OrderBy) Then
+            sb.Append " ORDER BY " & OrderBy
+        End If
+        
+        sb.Append ";"
+        makeStr = sb.ToString()
     End If
 End Function
 
